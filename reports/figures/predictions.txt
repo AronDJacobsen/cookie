@@ -1,0 +1,6 @@
+Image: dress.png: Predicted Class: 6, Class Name: Shirt
+[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+Image: shirt.png: Predicted Class: 2, Class Name: Pullover
+[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+Image: shoe.png: Predicted Class: 9, Class Name: Ankle Boot
+[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
