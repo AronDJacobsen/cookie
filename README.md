@@ -6,6 +6,16 @@ Template: https://github.com/SkafteNicki/mlops_template
 
 ## Setup
 
+#### Clone the repository and data
+
+```bash
+git clone https://github.com/AronDJacobsen/cookie.git
+cd https://github.com/AronDJacobsen/cookie.git
+dvc pull
+```
+*You need access to the google drive data folder*
+
+
 #### Precompiled environment
 
 ```bash
@@ -176,3 +186,36 @@ ruff check .
 ```bash
 ruff format .
 ```
+
+### Working with git and dvc
+
+
+Desired flow:
+   ```bach
+   dvc add -> git add -> git commit -> git tag -> dvc push -> git push.
+   ```
+
+Pushing
+   ```bash
+   dvc add data/ # identify/track changes from last commit
+   git add data.dvc # stage in git, not necessary if auto-staging
+   git commit -m "Add or update data using DVC"
+   git tag -a "v1.0" -m "Release version 1.0" # to help navigate versions 
+   dvc push # push dvc tracked data to remote storage
+   git push # push the git commit and tag
+   ```
+
+If you've tagged a release in both Git and DVC:
+
+1. To go back to a specific Git commit and DVC data version:
+   ```bash
+   git checkout <tag_name>
+   dvc checkout
+   ```
+
+2. To go back to a specific DVC data version without changing your Git commit:
+   ```bash
+   dvc checkout -rev <tag_name>
+   ```
+
+
