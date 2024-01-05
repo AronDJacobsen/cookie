@@ -1,12 +1,11 @@
 import os
-import torch
-from torch import nn
-from torch import optim
+
 import matplotlib.pyplot as plt
+import torch
+from torch import nn, optim
 
+from data.data import get_dataloaders
 from models.model import Network, save_model
-from data.get_data import get_data
-
 
 
 def validation(model, testloader, criterion):
@@ -54,6 +53,7 @@ def train(model, trainloader, testloader, criterion, optimizer=None, epochs=5, p
             labels.resize_(labels.size()[0])
             optimizer.zero_grad()
 
+            # Forward and backward passes
             output = model.forward(images)
             loss = criterion(output, labels)
             loss_list.append(loss.item())
@@ -81,17 +81,16 @@ def train(model, trainloader, testloader, criterion, optimizer=None, epochs=5, p
 
                 # Make sure dropout and grads are on for training
                 model.train()
-                
-                #if loss < 1.7:
+
+                # if loss < 1.7:
                 #    break
 
     # Save a figure off the loss
-    plot = plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(10, 10))
     plt.plot(loss_list)
-    plt.xlabel('Steps')
-    plt.ylabel('Loss')
-    plt.savefig(os.getcwd() + '/reports/figures/loss.png')
-
+    plt.xlabel("Steps")
+    plt.ylabel("Loss")
+    plt.savefig(os.getcwd() + "/reports/figures/loss.png")
 
 
 if __name__ == "__main__":
@@ -99,10 +98,10 @@ if __name__ == "__main__":
     criterion = nn.NLLLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    processed_data_path = os.getcwd() + os.sep + 'data/processed/processed_data.pt'
+    processed_data_path = os.getcwd() + os.sep + "data/processed/processed_data.pt"
     trainloader, valloader = get_dataloaders(processed_data_path)
 
     train(model, trainloader, valloader, criterion, optimizer=None, epochs=1, print_every=40)
 
-    save_path = 'models/trained_model.pth'
+    save_path = "models/trained_model.pth"
     save_model(model, save_path)

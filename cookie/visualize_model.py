@@ -1,23 +1,17 @@
 import os
+
 import torch
-from torchvision import datasets, transforms
-from torch import nn
-import torch.nn.functional as F
-from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
-
-
-from models.model import Network, save_model, load_checkpoint
-from data.get_data import get_dataloaders
 from visualize.visualize import tsne_visualization
 
+from data.get_data import get_dataloaders
+from models.model import load_checkpoint
 
-
-if __name__ == '__main__':
-
-    model_name = 'trained_model.pth'
-    model = load_checkpoint(os.path.join('models', model_name))
-    processed_data_path = os.getcwd() + os.sep + 'data/processed/processed_data.pt'
+if __name__ == "__main__":
+    # load model
+    model_name = "trained_model.pth"
+    model = load_checkpoint(os.path.join("models", model_name))
+    # load data
+    processed_data_path = os.getcwd() + os.sep + "data/processed/processed_data.pt"
     trainloader, valloader = get_dataloaders(processed_data_path)
 
     # Specify the index of the layer from which to extract the intermediate representation
@@ -51,15 +45,3 @@ if __name__ == '__main__':
     ]
 
     tsne_visualization(val_data, val_labels, class_labels)
-
-
-
-
-
-
-
-
-
-
-
-

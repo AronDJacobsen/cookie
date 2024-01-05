@@ -166,3 +166,13 @@ To save the current environment into a YAML file, you can use the `conda env exp
 
    This command tells `pipreqs` to scan the current directory (`.`) for Python files and generate a `requirements.txt` file.
 
+
+### Ruff
+
+```bash
+ruff check .
+```
+
+```bash
+ruff format .
+```
