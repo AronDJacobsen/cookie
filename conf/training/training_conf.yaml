@@ -1,0 +1,7 @@
+# @package _group_
+seed: 42
+dataset_path: "data/processed/processed_data.pt" # relative
+batch_size: 32
+epochs: 1
+lr: 0.001
+print_every: 40

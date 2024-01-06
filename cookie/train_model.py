@@ -1,11 +1,16 @@
+import logging
 import os
 
+import hydra
+from omegaconf import OmegaConf
 import matplotlib.pyplot as plt
 import torch
 from torch import nn, optim
 
-from data.data import get_dataloaders
+from data.get_data import get_dataloaders
 from models.model import Network, save_model
+
+log = logging.getLogger(__name__)
 
 
 def validation(model, testloader, criterion):
@@ -35,10 +40,34 @@ def validation(model, testloader, criterion):
     return test_loss, accuracy
 
 
-def train(model, trainloader, testloader, criterion, optimizer=None, epochs=5, print_every=40):
+# define hydra main entry point
+@hydra.main(config_path="../conf", config_name="config.yaml")
+def train(config):
     """Train model."""
-    if optimizer is None:
-        optimizer = torch.optim.Adam(model.parameters(), lr=1e-2)
+    # configureation
+    print(f"configuration: \n {OmegaConf.to_yaml(config)}")
+    #hparams = config.experiment
+    h_model = config.model
+    h_training = config.training
+    # model specific
+
+    model = Network(h_model.n_input, h_model.n_output, h_model.hidden_layers)
+
+    # training specific
+    print_every = h_training.print_every
+    seed = h_training.seed
+    torch.manual_seed(seed)
+    epochs = h_training.epochs
+    lr = h_training.lr
+
+    # initialize
+    criterion = nn.NLLLoss()
+    optimizer = optim.Adam(model.parameters(), lr=lr)
+
+    repo_path = os.getcwd().split("cookie")[0] + "cookie"
+    processed_data_path = repo_path + os.sep + h_training.dataset_path
+    trainloader, valloader = get_dataloaders(processed_data_path)
+    
     steps = 0
     running_loss = 0
     loss_list = []
@@ -68,13 +97,18 @@ def train(model, trainloader, testloader, criterion, optimizer=None, epochs=5, p
 
                 # Turn off gradients for validation, will speed up inference
                 with torch.no_grad():
-                    test_loss, accuracy = validation(model, testloader, criterion)
+                    test_loss, accuracy = validation(model, valloader, criterion)
 
-                print(
-                    "Epoch: {}/{}.. ".format(e + 1, epochs),
-                    "Training Loss: {:.3f}.. ".format(running_loss / print_every),
-                    "Test Loss: {:.3f}.. ".format(test_loss / len(testloader)),
-                    "Test Accuracy: {:.3f}".format(accuracy / len(testloader)),
+                #log.info(
+                #    "Epoch: {}/{}.. ".format(e + 1, epochs),
+                #    "Training Loss: {:.3f}.. ".format(running_loss / print_every),
+                #    "Test Loss: {:.3f}.. ".format(test_loss / len(valloader)),
+                #    "Test Accuracy: {:.3f}".format(accuracy / len(valloader)),
+                #)
+                log.info(
+                    "Epoch: {}/{}.. Training Loss: {:.3f}.. Test Loss: {:.3f}.. Test Accuracy: {:.3f}".format(
+                        e + 1, epochs, running_loss / print_every, test_loss / len(valloader), accuracy / len(valloader)
+                    )
                 )
 
                 running_loss = 0
@@ -90,18 +124,13 @@ def train(model, trainloader, testloader, criterion, optimizer=None, epochs=5, p
     plt.plot(loss_list)
     plt.xlabel("Steps")
     plt.ylabel("Loss")
-    plt.savefig(os.getcwd() + "/reports/figures/loss.png")
+    plt.savefig(repo_path + "/reports/figures/loss.png")
 
+
+    save_path = repo_path + "/models/trained_model.pth"
+    save_model(model, save_path)
 
 if __name__ == "__main__":
-    model = Network(784, 10, [512, 256, 128])
-    criterion = nn.NLLLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    processed_data_path = os.getcwd() + os.sep + "data/processed/processed_data.pt"
-    trainloader, valloader = get_dataloaders(processed_data_path)
+    train()
 
-    train(model, trainloader, valloader, criterion, optimizer=None, epochs=1, print_every=40)
-
-    save_path = "models/trained_model.pth"
-    save_model(model, save_path)

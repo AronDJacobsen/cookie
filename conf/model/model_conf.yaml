@@ -1,0 +1,6 @@
+model_name: "nnetwork"
+n_input: 784
+n_output: 10
+hidden_layers: [512, 256, 128]
+
+

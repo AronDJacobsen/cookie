@@ -3,6 +3,10 @@
 testing cookie cutter.
 Template: https://github.com/SkafteNicki/mlops_template
 
+Reproducibility: the scientific method
+
+> Observe -> Question -> Hypotheses -> Experiment -> Conclude -> Result -> Observe -> ...
+
 
 ## Setup
 
@@ -138,7 +142,7 @@ started with Machine Learning Operations (MLOps).
 
 ---
 
-## My notes
+# My notes
 
 
 
@@ -162,19 +166,18 @@ To save the current environment into a YAML file, you can use the `conda env exp
 
 ### requirements.txt
 
-1. **Navigate to your project directory:**
+Exhaustive list based on environment:
 
-   Open a terminal or command prompt and navigate to the root directory of your Python project.
+`pip list --format=freeze > requirements.txt`
 
-**Run `pipreqs`:**
+*remove end string from torch and torchvision and torch==2.0.1*
 
-   Once you're in the project directory, run the following command:
 
-   ```bash
-   pipreqs .
-   ```
+or minimalistic list based on directory:
 
-   This command tells `pipreqs` to scan the current directory (`.`) for Python files and generate a `requirements.txt` file.
+`pip install pipreqs`
+
+*Compatibility check: https://pytorch.org/get-started/previous-versions/*
 
 
 ### Ruff
@@ -217,5 +220,54 @@ If you've tagged a release in both Git and DVC:
    ```bash
    dvc checkout -rev <tag_name>
    ```
+
+
+### Docker
+
+`--name {container_name}`
+
+#### Training
+
+
+Build image:
+```bash
+docker build -f dockerfiles/train_model.dockerfile . -t train_model:latest
+```
+
+Train:
+```bash
+docker run --name experiment1 \
+   -v $(pwd)/data/processed:/data/processed/ \
+   -v $(pwd)/models:/models/ \
+   train_model:latest
+```
+
+Transfer files from container to local:
+```bash
+docker cp experiment1:/models/trained_model.pth $(pwd)/models/trained_model.pth
+```
+
+
+#### Predicting
+
+Build image:
+```bash
+docker build -f dockerfiles/predict_model.dockerfile . -t predict_model:latest
+```
+
+Run prediction script:
+```bash
+docker run --name predict --rm \
+   -v $(pwd)/data/example_images:/data/example_images \
+   -v $(pwd)/models:/models \
+   predict_model:latest \
+   /models/trained_model.pth \
+   /data/example_images
+```
+
+Transfer files:
+```bash
+docker cp experiment1:/reports/figures/predictions.txt $(pwd)/reports/figures/predictions.txt
+```
 
 
