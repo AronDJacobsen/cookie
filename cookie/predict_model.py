@@ -5,6 +5,9 @@ import numpy as np
 import torch
 from PIL import Image
 from torchvision import transforms
+import wandb
+import random
+from rich.logging import RichHandler
 
 from models.model import load_checkpoint, predict_single_sample
 
@@ -18,6 +21,10 @@ python cookie/predict_model.py \
 
 
 """
+
+
+# Initialize wandb
+wandb.init(project="fashion-mnist", name="predict1")
 
 
 def load_images(data_path):
@@ -125,6 +132,9 @@ if __name__ == "__main__":
         "Ankle Boot",
     ]
 
+
+    my_table = wandb.Table(columns=["image", "label", "prediction"])
+
     # Make predictions
     predictions = predict(model, dataloader)
 
@@ -135,4 +145,11 @@ if __name__ == "__main__":
             file.write(f"Image: {img_names[i]}: Predicted Class: {predicted_class}, Class Name: {class_name}\n")
             file.write("\t".join(map(str, row)) + "\n")
 
+            # Log your predictions to W&B
+            # Assuming all_images[i] is a torch tensor representing an image
+            wandb_image = wandb.Image(all_images[i].view(28, 28).numpy(), caption=img_names[i])
+            my_table.add_data(wandb_image, img_names[i], class_name)
+
+    # Log your Table to W&B
+    wandb.log({"mnist_predictions": my_table})
     print("Finished")

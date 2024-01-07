@@ -1,4 +1,4 @@
-Image: dress.png: Predicted Class: 6, Class Name: Shirt
+Image: dress.png: Predicted Class: 0, Class Name: T-shirt/top
 [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 Image: shirt.png: Predicted Class: 2, Class Name: Pullover
 [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]

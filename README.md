@@ -270,4 +270,7 @@ Transfer files:
 docker cp experiment1:/reports/figures/predictions.txt $(pwd)/reports/figures/predictions.txt
 ```
 
+### Sweep
+
+wandb sweep --project fashion-mnist "./conf/sweep/lr_sweep.yaml" 
 

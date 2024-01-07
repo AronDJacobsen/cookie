@@ -1,6 +1,6 @@
-# @package _group_
 seed: 42
 dataset_path: "data/processed/processed_data.pt" # relative
+model_path: "models/" # relative
 batch_size: 32
 epochs: 1
 lr: 0.001

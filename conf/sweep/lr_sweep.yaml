@@ -1,0 +1,22 @@
+# Possible params here: https://docs.wandb.ai/guides/sweeps/define-sweep-configuration
+
+program: cookie/train_model.py
+name: lr_sweep
+method: grid
+
+metric:
+  name: accuracy
+  goal: maximize
+
+parameters:
+  training.lr:  # Use - to override values
+      values:
+        - 0.001
+        - 0.01
+
+# pass in the command line arguments inline with hydra
+command:
+  - ${env}
+  - python
+  - ${program}
+  - ${args_no_hyphens}

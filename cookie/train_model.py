@@ -6,11 +6,20 @@ from omegaconf import OmegaConf
 import matplotlib.pyplot as plt
 import torch
 from torch import nn, optim
+import wandb
+import random
+from rich.logging import RichHandler
 
 from data.get_data import get_dataloaders
 from models.model import Network, save_model
 
 log = logging.getLogger(__name__)
+#log.root.handlers[0] = RichHandler(markup=True)  # set rich handler
+
+# https://wandb.ai/adrishd/hydra-example/reports/Configuring-W-B-Projects-with-Hydra--VmlldzoxNTA2MzQw
+
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def validation(model, testloader, criterion):
@@ -46,12 +55,22 @@ def train(config):
     """Train model."""
     # configureation
     print(f"configuration: \n {OmegaConf.to_yaml(config)}")
+
+    # wandb
+    # Initialize wandb
+    #wandb.init(project="fashion-mnist", name="experiment1")
+    # Initialize WandB
+    run = wandb.init(project=config.wandb.project)
+
+
     #hparams = config.experiment
     h_model = config.model
     h_training = config.training
     # model specific
 
     model = Network(h_model.n_input, h_model.n_output, h_model.hidden_layers)
+    # Magic
+    wandb.watch(model, log_freq=100) # steps
 
     # training specific
     print_every = h_training.print_every
@@ -60,6 +79,9 @@ def train(config):
     epochs = h_training.epochs
     lr = h_training.lr
 
+    # Log hyperparameters
+    wandb.config.update({"epochs": epochs, "lr": lr})
+
     # initialize
     criterion = nn.NLLLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
@@ -67,7 +89,6 @@ def train(config):
     repo_path = os.getcwd().split("cookie")[0] + "cookie"
     processed_data_path = repo_path + os.sep + h_training.dataset_path
     trainloader, valloader = get_dataloaders(processed_data_path)
-    
     steps = 0
     running_loss = 0
     loss_list = []
@@ -85,6 +106,8 @@ def train(config):
             # Forward and backward passes
             output = model.forward(images)
             loss = criterion(output, labels)
+            # Log metrics
+            wandb.log({"Training Loss": loss.item()})
             loss_list.append(loss.item())
             loss.backward()
             optimizer.step()
@@ -98,13 +121,8 @@ def train(config):
                 # Turn off gradients for validation, will speed up inference
                 with torch.no_grad():
                     test_loss, accuracy = validation(model, valloader, criterion)
-
-                #log.info(
-                #    "Epoch: {}/{}.. ".format(e + 1, epochs),
-                #    "Training Loss: {:.3f}.. ".format(running_loss / print_every),
-                #    "Test Loss: {:.3f}.. ".format(test_loss / len(valloader)),
-                #    "Test Accuracy: {:.3f}".format(accuracy / len(valloader)),
-                #)
+                # Log metrics
+                wandb.log({"Test Loss": test_loss / len(valloader), "Test Accuracy": accuracy / len(valloader)})
                 log.info(
                     "Epoch: {}/{}.. Training Loss: {:.3f}.. Test Loss: {:.3f}.. Test Accuracy: {:.3f}".format(
                         e + 1, epochs, running_loss / print_every, test_loss / len(valloader), accuracy / len(valloader)
