@@ -9,7 +9,7 @@ import pytorch_lightning as pl
 from torch import nn, optim
 import torch
 
-from data.get_data import get_dataloaders
+from data.dataloader import get_dataloaders
 
 
 

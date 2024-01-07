@@ -5,6 +5,7 @@ from torchvision import datasets, transforms
 
 
 def process_and_save_data(data_folder, output_folder):
+
     # Define a transform to normalize the data
     transform = transforms.Compose([transforms.ToTensor(),
                                     transforms.Normalize((0.5,), (0.5,))])  # assuming 0,1 range

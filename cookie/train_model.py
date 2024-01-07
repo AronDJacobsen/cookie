@@ -10,7 +10,7 @@ import wandb
 import random
 from rich.logging import RichHandler
 
-from data.get_data import get_dataloaders
+from data.dataloader import get_dataloaders
 from models.model import Network, save_model
 
 log = logging.getLogger(__name__)

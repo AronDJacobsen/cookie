@@ -3,7 +3,7 @@ import os
 import torch
 from visualize.visualize import tsne_visualization
 
-from data.get_data import get_dataloaders
+from data.dataloader import get_dataloaders
 from models.model import load_checkpoint
 
 if __name__ == "__main__":
