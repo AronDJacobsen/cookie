@@ -4,6 +4,10 @@ models/
 outputs/
 wandb/
 
+
+!cookie/data/
+!cookie/models/
+
 # test cache
 manual_test/
 
