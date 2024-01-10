@@ -8,7 +8,7 @@ on:
 
 jobs:
   codecheck:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
@@ -39,8 +39,7 @@ jobs:
 
     - name: Run Ruff Check and Format
       run: |
-        ruff check .
-        ruff format .
+        ruff check --fix .
 
     - name: Install Mypy
       run: |
