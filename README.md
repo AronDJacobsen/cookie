@@ -203,7 +203,7 @@ Pushing
    dvc add data/ # identify/track changes from last commit
    git add data.dvc # stage in git, not necessary if auto-staging
    git commit -m "Add or update data using DVC"
-   git tag -a "v1.0" -m "Release version 1.0" # to help navigate versions 
+   git tag -a "v1.0" -m "Release version 1.0" # to help navigate versions
    dvc push # push dvc tracked data to remote storage
    git push # push the git commit and tag
    ```
@@ -272,5 +272,4 @@ docker cp experiment1:/reports/figures/predictions.txt $(pwd)/reports/figures/pr
 
 ### Sweep
 
-wandb sweep --project fashion-mnist "./conf/sweep/lr_sweep.yaml" 
-
+wandb sweep --project fashion-mnist "./conf/sweep/lr_sweep.yaml"

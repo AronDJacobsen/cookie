@@ -1,17 +1,14 @@
-from omegaconf import OmegaConf
-import hydra
 import os
 
-from pytorch_lightning import Trainer
-from pytorch_lightning import LightningModule
-from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
+import hydra
 import pytorch_lightning as pl
-from torch import nn, optim
 import torch
+from omegaconf import OmegaConf
+from pytorch_lightning import LightningModule, Trainer
+from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
+from torch import nn, optim
 
 from data.dataloader import get_dataloaders
-
-
 
 
 class Network(LightningModule):
@@ -34,15 +31,17 @@ class Network(LightningModule):
         self.n_hidden = len(self.hidden_layers)
 
         # Define a model
-        self.classifier.add_module('fc1', nn.Linear(config.model.n_input, self.hidden_layers[0]))
-        self.classifier.add_module('relu1', nn.ReLU())
-        self.classifier.add_module('dropout1', nn.Dropout(p=self.dropout))
-        for i  in range(self.n_hidden - 1):
-            self.classifier.add_module('fc{}'.format(i+2), nn.Linear(self.hidden_layers[i], self.hidden_layers[i+1]))
-            self.classifier.add_module('relu{}'.format(i+2), nn.ReLU())
-            self.classifier.add_module('dropout{}'.format(i+2), nn.Dropout(p=self.dropout))
-        self.classifier.add_module('output', nn.Linear(self.hidden_layers[-1], config.model.n_output))
-        self.classifier.add_module('softmax', nn.LogSoftmax(dim=1))
+        self.classifier.add_module("fc1", nn.Linear(config.model.n_input, self.hidden_layers[0]))
+        self.classifier.add_module("relu1", nn.ReLU())
+        self.classifier.add_module("dropout1", nn.Dropout(p=self.dropout))
+        for i in range(self.n_hidden - 1):
+            self.classifier.add_module(
+                "fc{}".format(i + 2), nn.Linear(self.hidden_layers[i], self.hidden_layers[i + 1])
+            )
+            self.classifier.add_module("relu{}".format(i + 2), nn.ReLU())
+            self.classifier.add_module("dropout{}".format(i + 2), nn.Dropout(p=self.dropout))
+        self.classifier.add_module("output", nn.Linear(self.hidden_layers[-1], config.model.n_output))
+        self.classifier.add_module("softmax", nn.LogSoftmax(dim=1))
 
         self.criterion = nn.NLLLoss()
 
@@ -66,8 +65,8 @@ class Network(LightningModule):
         y_hat = self(x)
         loss = self.criterion(y_hat, y)
         acc = self.accuracy(y_hat, y)
-        self.log('train_loss', loss)
-        self.log('train_acc', acc)
+        self.log("train_loss", loss)
+        self.log("train_acc", acc)
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -78,8 +77,8 @@ class Network(LightningModule):
         y_hat = self(x)
         loss = self.criterion(y_hat, y)
         acc = self.accuracy(y_hat, y)
-        self.log('val_loss', loss)
-        self.log('val_acc', acc)
+        self.log("val_loss", loss)
+        self.log("val_acc", acc)
         return loss
 
     def configure_optimizers(self):
@@ -88,7 +87,7 @@ class Network(LightningModule):
 
     def accuracy(self, y_hat, y):
         """Calculate accuracy."""
-                
+
         ## Calculating the accuracy
         # Model's output is log-softmax, take exponential to get the probabilities
         ps = torch.exp(y_hat)
@@ -97,6 +96,7 @@ class Network(LightningModule):
         # Accuracy is number of correct predictions divided by all predictions, just take the mean
         accuracy = equality.type_as(torch.FloatTensor()).mean()
         return accuracy
+
 
 @hydra.main(config_path="../conf", config_name="config.yaml")
 def run_experiment(config):
@@ -117,22 +117,17 @@ def run_experiment(config):
     model_name = model.model_name + str(len(os.listdir(model_path)))
     checkpoint_callback = ModelCheckpoint(
         dirpath=model_path, filename=model_name + "-{epoch:02d}-{val_loss:.2f}", monitor="val_loss", mode="min"
-        )
-    early_stopping_callback = EarlyStopping(
-        monitor="val_loss", patience=3, verbose=True, mode="min"
-        )
+    )
+    early_stopping_callback = EarlyStopping(monitor="val_loss", patience=3, verbose=True, mode="min")
 
     # Final arguments
-    trainer = Trainer(max_epochs=config.training.epochs, 
+    trainer = Trainer(
+        max_epochs=config.training.epochs,
         callbacks=[checkpoint_callback, early_stopping_callback],
-        logger=pl.loggers.WandbLogger(project=config.wandb.project)
-        )
+        logger=pl.loggers.WandbLogger(project=config.wandb.project),
+    )
     trainer.fit(model, train_dataloader, val_dataloader)
 
+
 if __name__ == "__main__":
-    
     run_experiment()
-
-
-
-

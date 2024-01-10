@@ -1,21 +1,20 @@
 import logging
 import os
+import random
 
 import hydra
-from omegaconf import OmegaConf
 import matplotlib.pyplot as plt
 import torch
-from torch import nn, optim
-import wandb
-import random
+from omegaconf import OmegaConf
 from rich.logging import RichHandler
+from torch import nn, optim
 
+import wandb
 from data.dataloader import get_dataloaders
 from models.model import Network, save_model
 
-
 log = logging.getLogger(__name__)
-#log.root.handlers[0] = RichHandler(markup=True)  # set rich handler
+# log.root.handlers[0] = RichHandler(markup=True)  # set rich handler
 
 # https://wandb.ai/adrishd/hydra-example/reports/Configuring-W-B-Projects-with-Hydra--VmlldzoxNTA2MzQw
 
@@ -59,19 +58,18 @@ def train(config):
 
     # wandb
     # Initialize wandb
-    #wandb.init(project="fashion-mnist", name="experiment1")
+    # wandb.init(project="fashion-mnist", name="experiment1")
     # Initialize WandB
     run = wandb.init(project=config.wandb.project)
 
-
-    #hparams = config.experiment
+    # hparams = config.experiment
     h_model = config.model
     h_training = config.training
     # model specific
 
     model = Network(h_model.n_input, h_model.n_output, h_model.hidden_layers)
     # Magic
-    wandb.watch(model, log_freq=100) # steps
+    wandb.watch(model, log_freq=100)  # steps
 
     # training specific
     print_every = h_training.print_every
@@ -145,11 +143,9 @@ def train(config):
     plt.ylabel("Loss")
     plt.savefig(repo_path + "/reports/figures/loss.png")
 
-
     save_path = repo_path + "/models/trained_model.pth"
     save_model(model, save_path)
 
+
 if __name__ == "__main__":
-
     train()
-

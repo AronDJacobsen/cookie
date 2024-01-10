@@ -1,18 +1,18 @@
 import argparse
 import os
+import random
 
 import numpy as np
 import torch
 from PIL import Image
-from torchvision import transforms
-import wandb
-import random
 from rich.logging import RichHandler
+from torchvision import transforms
 
+import wandb
 from models.model import load_checkpoint, predict_single_sample
 
 """
-Run command: 
+Run command:
 
 
 python cookie/predict_model.py \
@@ -131,7 +131,6 @@ if __name__ == "__main__":
         "Bag",
         "Ankle Boot",
     ]
-
 
     my_table = wandb.Table(columns=["image", "label", "prediction"])
 

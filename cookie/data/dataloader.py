@@ -1,10 +1,10 @@
 import os
+
 import torch
 from torchvision import datasets, transforms
 
+
 def get_dataloaders(processed_data_path):
-
-
     if not os.path.exists(processed_data_path):
         raise Exception("Processed data not found at {}".format(processed_data_path))
 
@@ -15,7 +15,6 @@ def get_dataloaders(processed_data_path):
 
     # Convert processed data back to a PyTorch dataset
     processed_dataset = torch.utils.data.TensorDataset(torch.cat(processed_images), torch.cat(processed_labels))
-
 
     train_ratio = 0.8
     num_samples = len(processed_dataset)
@@ -29,11 +28,4 @@ def get_dataloaders(processed_data_path):
     trainloader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True)
     valloader = torch.utils.data.DataLoader(val_data, batch_size=batch_size, shuffle=False)
 
-
     return trainloader, valloader
-
-
-
-
-
-

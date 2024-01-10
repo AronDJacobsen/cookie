@@ -1,12 +1,12 @@
-import torch
-from torch import nn
-import torch.nn.functional as F
-from torchvision import datasets, transforms
-import torch.optim as optim
-import matplotlib.pyplot as plt
-import numpy as np
 import os
 
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+import torch.nn.functional as F
+import torch.optim as optim
+from torch import nn
+from torchvision import datasets, transforms
 
 
 class Network(nn.Module):
@@ -53,16 +53,18 @@ class Network(nn.Module):
 
         return None
 
+
 ### Helper function
+
 
 def predict_single_sample(model: torch.nn.Module, sample: torch.Tensor, class_labels: list) -> tuple:
     """Run prediction for a single sample using the given model.
-    
+
     Args:
         model: model to use for prediction
         sample: input sample tensor
         class_labels: list of class labels
-    
+
     Returns:
         Tuple containing the predicted label and the corresponding class name
     """
@@ -72,10 +74,10 @@ def predict_single_sample(model: torch.nn.Module, sample: torch.Tensor, class_la
     with torch.no_grad():
         # Move the sample to the device of the model
         sample = sample.to(device)
-        
+
         # Perform prediction on the sample
         prediction = model(sample.unsqueeze(0))  # Add a batch dimension
-        
+
     probs = torch.exp(prediction)
     _, predicted_class = probs.max(1)
     class_name = class_labels[predicted_class.item()]
@@ -83,14 +85,12 @@ def predict_single_sample(model: torch.nn.Module, sample: torch.Tensor, class_la
     return predicted_class.item(), class_name
 
 
-
-
 def save_model(model, save_path):
     checkpoint = {
-        'input_size': 784,
-        'output_size': 10,
-        'hidden_layers': [each.out_features for each in model.hidden_layers],
-        'state_dict': model.state_dict()
+        "input_size": 784,
+        "output_size": 10,
+        "hidden_layers": [each.out_features for each in model.hidden_layers],
+        "state_dict": model.state_dict(),
     }
 
     torch.save(checkpoint, save_path)
@@ -98,9 +98,7 @@ def save_model(model, save_path):
 
 def load_checkpoint(filepath):
     checkpoint = torch.load(filepath)
-    model = Network(checkpoint['input_size'],
-                             checkpoint['output_size'],
-                             checkpoint['hidden_layers'])
-    model.load_state_dict(checkpoint['state_dict'])
-    
+    model = Network(checkpoint["input_size"], checkpoint["output_size"], checkpoint["hidden_layers"])
+    model.load_state_dict(checkpoint["state_dict"])
+
     return model
