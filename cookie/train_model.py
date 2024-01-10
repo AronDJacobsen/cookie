@@ -13,6 +13,7 @@ from rich.logging import RichHandler
 from data.dataloader import get_dataloaders
 from models.model import Network, save_model
 
+
 log = logging.getLogger(__name__)
 #log.root.handlers[0] = RichHandler(markup=True)  # set rich handler
 
