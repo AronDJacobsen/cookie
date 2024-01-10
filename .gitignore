@@ -3,7 +3,7 @@ data/
 models/
 outputs/
 wandb/
-
+reports/
 
 !cookie/data/
 !cookie/models/
