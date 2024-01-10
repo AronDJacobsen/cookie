@@ -1,24 +1,14 @@
-name: "Run tests"
+name: "Code Check"
 
 on:
   push:
-    branches: [ master, main ]
-    paths:
-      - '!tests.yml'  # Exclude the tests.yml file
+    branches: [master, main]
   pull_request:
-    branches: [ master, main ]
-    paths:
-      - '!tests.yml'  # Exclude the tests.yml file
+    branches: [master, main]
+
 jobs:
-  build:
-
+  codecheck:
     runs-on: macos-latest
-
-    #runs-on: ${{ matrix.os }}
-    #strategy:
-    #  matrix:
-    #    os: [ubuntu-latest, windows-latest, macos-latest]
-    #    python-version: [3.11]
 
     steps:
     - name: Checkout
@@ -26,7 +16,6 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        #python-version: ${{ matrix.python-version }}
         python-version: 3.11
 
     # Cache Python dependencies
@@ -43,7 +32,20 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r requirements_tests.txt
-    - name: Test with pytest
+
+    - name: Install Ruff
       run: |
-        pip install pytest
-        pytest -v
+        pip install ruff
+
+    - name: Run Ruff Check and Format
+      run: |
+        ruff check .
+        ruff format .
+
+    - name: Install Mypy
+      run: |
+        pip install mypy
+
+    - name: Run Mypy
+      run: |
+        mypy .
