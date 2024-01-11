@@ -3,6 +3,7 @@ name: Docker Image CI
 on:
     push:
         branches: [ main ]
+      - '!tests.yml'  # Exclude the tests.yml file
 
 jobs:
     build:
