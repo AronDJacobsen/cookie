@@ -17,6 +17,6 @@ jobs:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
         run: |
+          echo $DOCKER_HUB_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
           docker build . --file dockerfiles/continuous.dockerfile --tag continuous:latest
-          echo docker login -username "$username" -password "$token"
           docker push $DOCKER_HUB_USERNAME/$DOCKER_HUB_REPOSITORY:continuous:latest
