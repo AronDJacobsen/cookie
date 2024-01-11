@@ -8,16 +8,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Build the Docker image
-        env: # Set the secret as an input
-          token: ${{ secrets.DOCKER_HUB_TOKEN }}
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          repository: ${{ secrets.DOCKER_HUB_REPOSITORY }}
+        env:
+          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
         run: |
-          echo docker login \
-            -username "$username" \
-            -password "$token"
-          docker build . --file dockerfiles/continuous.dockerfile \
-            --tag continuous:latest
-          docker push $username/$repository:continuous:latest
+          echo $DOCKER_HUB_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+          docker build . --file dockerfiles/continuous.dockerfile --tag continuous:latest
+          docker push $DOCKER_HUB_USERNAME/$DOCKER_HUB_REPOSITORY:continuous:latest
