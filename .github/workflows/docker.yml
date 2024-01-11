@@ -1,21 +1,27 @@
-name: Docker Image CI
+name: Docker Build and Push
 
 on:
   push:
-    branches: [master, main]
+    branches:
+      - main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
+
+    env:
+      token: ${{ secrets.DOCKER_HUB_TOKEN }}
+      username: ${{ secrets.DOCKER_HUB_USERNAME }}
+      repository: ${{ secrets.DOCKER_HUB_REPOSITORY }}
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Build the Docker image
-        env: # Set the secret as an input
-          token: ${{ secrets.DOCKER_HUB_TOKEN }}
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          repository: ${{ secrets.DOCKER_HUB_REPOSITORY }}
-        run: |
-          echo docker login -username "$username" -password "$token"
-          docker build . --file dockerfiles/continuous.dockerfile --tag continuous:latest
-          docker push "$username/$repository:continuous:latest"
-          docker push "$DOCKER_HUB_USERNAME/$DOCKER_HUB_REPOSITORY:continuous-latest"
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t ${{ env.repository }}/continuous:latest .
+        docker push ${{ env.repository }}/continuous:latest
