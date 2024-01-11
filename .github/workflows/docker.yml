@@ -19,9 +19,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Login to Docker Hub
-      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+      run: echo | docker login -username "$username" --password "$token"
 
     - name: Build and Push Docker Image
       run: |
-        docker build -t ${{ env.repository }}/continuous:latest .
-        docker push ${{ env.repository }}/continuous:latest
+        docker build . -t $repository
+        docker push $repository
