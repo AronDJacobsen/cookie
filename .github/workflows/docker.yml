@@ -20,4 +20,4 @@ jobs:
             -password "$token"
           docker build . --file dockerfiles/continuous.dockerfile \
             --tag continuous:latest
-          docker push docker.io/$username/$repository
+          docker push $username/$repository:continuous:latest
