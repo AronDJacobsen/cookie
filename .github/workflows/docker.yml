@@ -18,3 +18,4 @@ jobs:
           echo docker login -username "$username" -password "$token"
           docker build . --file dockerfiles/continuous.dockerfile --tag continuous:latest
           docker push "$username/$repository:continuous:latest"
+          docker push "$DOCKER_HUB_USERNAME/$DOCKER_HUB_REPOSITORY:continuous-latest"
