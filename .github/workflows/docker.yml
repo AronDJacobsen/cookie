@@ -19,5 +19,5 @@ jobs:
             -username "$username" \
             -password "$token"
           docker build . --file dockerfiles/continuous.dockerfile \
-            --tag docker.io/$username/$repository
+            --tag continuous:latest
           docker push docker.io/$username/$repository
