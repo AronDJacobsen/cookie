@@ -10,9 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
+        env: # Set the secret as an input
+          token: ${{ secrets.DOCKER_HUB_TOKEN }}
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          repository: ${{ secrets.DOCKER_HUB_REPOSITORY }}
         run: |
-          echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login \
-          -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+          echo "$token" | docker login \
+          -u "$username" --password-stdin
           docker build . --file dockerfiles/continuous.dockerfile \
-          --tag docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:$GITHUB_SHA
-          docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:$GITHUB_SHA
+          --tag docker.io/$username/$repository
+          docker push docker.io/$username/$repository
