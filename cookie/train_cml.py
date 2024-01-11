@@ -1,6 +1,8 @@
 # assume we have a trained model
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
+import torch
+
 
 # creating a dummy train_dataloader
 train_dataloader = [(torch.randn(3, 224, 224), torch.randint(0, 10, (1,))) for _ in range(100)]
