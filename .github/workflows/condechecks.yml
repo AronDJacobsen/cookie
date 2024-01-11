@@ -3,9 +3,12 @@ name: "Code Check"
 on:
   push:
     branches: [master, main]
+    paths:
+      - '!codechecks.yml'  # Exclude the codechecks.yml file
   pull_request:
     branches: [master, main]
-
+    paths:
+      - '!codechecks.yml'  # Exclude the codechecks.yml file
 jobs:
   codecheck:
     runs-on: ubuntu-latest
