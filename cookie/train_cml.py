@@ -2,6 +2,15 @@
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 
+# creating a dummy train_dataloader
+train_dataloader = [(torch.randn(3, 224, 224), torch.randint(0, 10, (1,))) for _ in range(100)]
+# creating a dummy model
+model = torch.nn.Sequential(
+    torch.nn.Conv2d(3, 10, 3),
+    torch.nn.Flatten(),
+    torch.nn.Linear(10 * 222 * 222, 10),
+)
+
 preds, target = [], []
 for batch in train_dataloader:
     x, y = batch
