@@ -15,14 +15,12 @@ jobs:
       repository: ${{ secrets.DOCKER_HUB_REPOSITORY }}
 
     steps:
-    - name: Checkout Repository
+    - name: Login Build and Push
       uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
       run: |
-        docker login -username "$username" --password "$token"
-
-    - name: Build and Push Docker Image
-      run: |
-        docker build . -t $repository
-        docker push $repository
+        echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login \
+            -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin docker.io
+        docker build . --file Dockerfile \
+            --tag docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:$GITHUB_SHA
+        docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:$GITHUB_SHA
