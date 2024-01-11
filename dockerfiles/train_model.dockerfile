@@ -1,6 +1,7 @@
 # Base image
 FROM python:3.11-slim
 
+
 # Install system dependencies for building software
 RUN apt update && \
     apt install --no-install-recommends -y build-essential gcc && \
