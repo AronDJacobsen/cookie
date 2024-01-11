@@ -19,7 +19,8 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Login to Docker Hub
-      run: echo | docker login -username "$username" --password "$token"
+      run: |
+        docker login -username "$username" --password "$token"
 
     - name: Build and Push Docker Image
       run: |
