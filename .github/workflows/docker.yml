@@ -16,8 +16,8 @@ jobs:
           repository: ${{ secrets.DOCKER_HUB_REPOSITORY }}
         run: |
           echo docker login \
-          -u "$username" \
-          -p "$token"
+            -username "$username" \
+            -password "$token"
           docker build . --file dockerfiles/continuous.dockerfile \
-          --tag docker.io/$username/$repository
+            --tag docker.io/$username/$repository
           docker push docker.io/$username/$repository
