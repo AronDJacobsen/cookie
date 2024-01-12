@@ -14,7 +14,7 @@ Reproducibility: the scientific method
 
 ```bash
 git clone https://github.com/AronDJacobsen/cookie.git
-cd https://github.com/AronDJacobsen/cookie.git
+cd cookie
 dvc pull
 ```
 *You need access to the google drive data folder*
