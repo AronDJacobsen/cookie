@@ -6,4 +6,4 @@ workerPoolSpecs:
         acceleratorCount: 1
     replicaCount: 1
     containerSpec:
-        imageUri: gcr.io/<project-id>/<docker-img>
+        imageUri: gcr.io/dtumlops-410913/what
