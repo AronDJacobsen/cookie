@@ -49,10 +49,18 @@ make data  # runs the make_dataset.py file, try it!
 
 ## Train the model
 
+
+```bash
+python cookie/train_model.py
+```
+
+*wandb login:* https://docs.wandb.ai/quickstart
+
+or try,
+
 ```bash
 make train  # runs the make_dataset.py file, try it!
 ```
-
 
 ## Evaluate
 
