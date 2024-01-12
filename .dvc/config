@@ -1,5 +1,8 @@
 [core]
-    remote = storage
+    remote = remote_storage
     autostage = true
 ['remote "storage"']
     url = gdrive://1f4qcO9LK7zODpxtdoSRSdXAugRSh8BsE
+['remote "remote_storage"']
+    url = gs://mlops_bucket_aron/
+    version_aware = true

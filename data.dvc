@@ -1,6 +1,109 @@
 outs:
-- md5: bcccf88929dd4a221e061528127c4121.dir
-  size: 306573142
-  nfiles: 15
-  hash: md5
+- hash: md5
   path: data
+  files:
+  - relpath: example_images/dress.png
+    md5: d964e2719cc1cc17410be5497235d888
+    size: 12416
+    cloud:
+      remote_storage:
+        etag: 08abc3c595c8d583031001
+        version_id: '1704983950090667'
+  - relpath: example_images/shirt.png
+    md5: 74422ace38b4bb0d230c835f9fb6e721
+    size: 37719
+    cloud:
+      remote_storage:
+        etag: 08a7e5c395c8d583031001
+        version_id: '1704983950062247'
+  - relpath: example_images/shoe.png
+    md5: 045a700957e6cb561e5714e86501525f
+    size: 4728
+    cloud:
+      remote_storage:
+        etag: 08a0bec895c8d583031001
+        version_id: '1704983950139168'
+  - relpath: processed/.gitkeep
+    md5: d41d8cd98f00b204e9800998ecf8427e
+    size: 0
+    cloud:
+      remote_storage:
+        etag: 0885ebc295c8d583031001
+        version_id: '1704983950046597'
+  - relpath: processed/processed_data.pt
+    md5: 81c9b5266084e6c5c29955f68c4ffddd
+    size: 220689582
+    cloud:
+      remote_storage:
+        etag: 08c584d2a2c8d583031001
+        version_id: '1704983977558597'
+  - relpath: raw/.gitkeep
+    md5: d41d8cd98f00b204e9800998ecf8427e
+    size: 0
+    cloud:
+      remote_storage:
+        etag: 089499c495c8d583031001
+        version_id: '1704983950068884'
+  - relpath: raw/FashionMNIST/raw/t10k-images-idx3-ubyte
+    md5: 8181f5470baa50b63fa0f6fddb340f0a
+    size: 7840016
+    cloud:
+      remote_storage:
+        etag: 088edeb19bc8d583031001
+        version_id: '1704983962349326'
+  - relpath: raw/FashionMNIST/raw/t10k-images-idx3-ubyte.gz
+    md5: bef4ecab320f06d8554ea6380940ec79
+    size: 4422102
+    cloud:
+      remote_storage:
+        etag: 08d1f99c96c8d583031001
+        version_id: '1704983951523025'
+  - relpath: raw/FashionMNIST/raw/t10k-labels-idx1-ubyte
+    md5: 15d484375f8d13e6eb1aabb0c3f46965
+    size: 10008
+    cloud:
+      remote_storage:
+        etag: 08abeec695c8d583031001
+        version_id: '1704983950112555'
+  - relpath: raw/FashionMNIST/raw/t10k-labels-idx1-ubyte.gz
+    md5: bb300cfdad3c16e7a12a480ee83cd310
+    size: 5148
+    cloud:
+      remote_storage:
+        etag: 08c8c7c595c8d583031001
+        version_id: '1704983950091208'
+  - relpath: raw/FashionMNIST/raw/train-images-idx3-ubyte
+    md5: f4a8712d7a061bf5bd6d2ca38dc4d50a
+    size: 47040016
+    cloud:
+      remote_storage:
+        etag: 08b4bff99ac8d583031001
+        version_id: '1704983961427892'
+  - relpath: raw/FashionMNIST/raw/train-images-idx3-ubyte.gz
+    md5: 8d4fb7e6c68d591d4c3dfef9ec88bf0d
+    size: 26421880
+    cloud:
+      remote_storage:
+        etag: 08fe94a299c8d583031001
+        version_id: '1704983957899902'
+  - relpath: raw/FashionMNIST/raw/train-labels-idx1-ubyte
+    md5: 9018921c3c673c538a1fc5bad174d6f9
+    size: 60008
+    cloud:
+      remote_storage:
+        etag: 088ee4c595c8d583031001
+        version_id: '1704983950094862'
+  - relpath: raw/FashionMNIST/raw/train-labels-idx1-ubyte.gz
+    md5: 25c81989df183df01b3e8a0aad5dffbe
+    size: 29515
+    cloud:
+      remote_storage:
+        etag: 089ec5c595c8d583031001
+        version_id: '1704983950090910'
+  - relpath: test_dvc.txt
+    md5: 098f6bcd4621d373cade4e832627b4f6
+    size: 4
+    cloud:
+      remote_storage:
+        etag: 08cffbaf95c8d583031001
+        version_id: '1704983949737423'
