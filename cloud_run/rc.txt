@@ -1,0 +1,9 @@
+
+
+cd cloud_run
+
+docker build -f simple_fastapi_app.dockerfile . -t gcp_test_app:latest
+
+
+docker tag gcp_test_app gcr.io/dtumlops-410913/gcp_test_app
+docker push gcr.io/dtumlops-410913/gcp_test_app

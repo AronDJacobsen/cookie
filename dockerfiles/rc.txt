@@ -1,0 +1,16 @@
+
+
+
+GCP
+
+docker build -t gcr.io/dtumlops-410913/train_model:latest -f dockerfiles/train_model.dockerfile .
+
+
+docker tag gcr.io/dtumlops-410913/train_model:latest gcr.io/dtumlops-410913/train_model:latest
+
+docker push gcr.io/dtumlops-410913/train_model:latest
+
+gcloud ai custom-jobs create \
+    --region=europe-west1 \
+    --display-name=test-run \
+    --config=dockerfiles/vertex_ai.yaml
